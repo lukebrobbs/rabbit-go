@@ -11,6 +11,10 @@ type Message struct {
 	Message string `json:"message"`
 }
 
+type CountResponse struct {
+	Count int `json: "count"`
+}
+
 func MakeUppercaseEndpoint(s Svc) Endpoint {
 	return func(request interface{}) (interface{}, error) {
 		m := request.(Message)
@@ -19,8 +23,16 @@ func MakeUppercaseEndpoint(s Svc) Endpoint {
 	}
 }
 
-// DecodeUppercaseMessage turns the Amqp message into a Message struct
-func DecodeUppercaseMessage(m amqp.Delivery) (interface{}, error) {
+func MakeCountEndpoint(s Svc) Endpoint {
+	return func(request interface{}) (interface{}, error) {
+		m := request.(Message)
+		u := s.count(m.Message)
+		return &CountResponse{u}, nil
+	}
+}
+
+// DecodeMessage turns the Amqp message into a Message struct
+func DecodeMessage(m amqp.Delivery) (interface{}, error) {
 	var msg Message
 	err := json.Unmarshal(m.Body, &msg)
 	if err != nil {

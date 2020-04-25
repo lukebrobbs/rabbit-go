@@ -57,11 +57,13 @@ func main() {
 	}
 	svc := stringsvc.New()
 
-	rabbit := stringsvc.NewAmqp(stringsvc.MakeUppercaseEndpoint(svc), stringsvc.DecodeUppercaseMessage)
+	uppercase := stringsvc.NewAmqp(stringsvc.MakeUppercaseEndpoint(svc), stringsvc.DecodeMessage)
+	count := stringsvc.NewAmqp(stringsvc.MakeCountEndpoint(svc), stringsvc.DecodeMessage)
 
 	go func() {
 		for m := range testMessages {
-			rabbit.HandleDelivery(m)
+			uppercase.HandleDelivery(m)
+			count.HandleDelivery(m)
 		}
 	}()
 

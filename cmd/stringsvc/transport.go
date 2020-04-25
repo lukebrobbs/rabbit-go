@@ -24,12 +24,12 @@ func (s subscriber) HandleDelivery(m amqp.Delivery) {
 	d, err := s.dec(m)
 
 	if err != nil {
-		fmt.Println("add error handler to subsicriber here")
+		fmt.Println("add error handler to subscriber here")
 	}
 
 	response, err := s.e(d)
 	if err != nil {
-		fmt.Println("add error handler to subsicriber here")
+		fmt.Println("add error handler to subscriber here")
 	}
 
 	fmt.Println(response)
